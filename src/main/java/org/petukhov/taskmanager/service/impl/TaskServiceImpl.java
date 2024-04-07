@@ -16,13 +16,22 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация сервиса для работы с задачами.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class TaskServiceImpl implements TaskService {
+
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
 
+    /**
+     * Создание задачи.
+     *
+     * @param createTaskDTO DTO для создания задачи.
+     */
     @Override
     public void createTask(CreateTaskDTO createTaskDTO) {
         Task newTask = taskMapper.toEntityTask(createTaskDTO);
@@ -30,6 +39,13 @@ public class TaskServiceImpl implements TaskService {
         taskMapper.toCreateTaskDTO(taskRepository.save(newTask));
     }
 
+    /**
+     * Получение информации по задаче по ее ID.
+     *
+     * @param taskId ID задачи.
+     * @return Информация о задаче.
+     * @throws TaskNotFoundException Если задача с указанным ID не найдена.
+     */
     @Override
     public TaskInfoDTO getTaskInfo(Long taskId) {
         Optional<Task> taskOpt = taskRepository.findById(taskId);
@@ -40,6 +56,13 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
+    /**
+     * Получение информации по всем задачам.
+     *
+     * @param pageNumber Номер страницы.
+     * @param pageSize   Размер страницы.
+     * @return Список информации о задачах.
+     */
     @Override
     public List<TaskInfoDTO> getAllTasks(Integer pageNumber, Integer pageSize) {
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
@@ -49,6 +72,12 @@ public class TaskServiceImpl implements TaskService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Удаление задачи.
+     *
+     * @param taskId ID задачи.
+     * @throws TaskNotFoundException Если задача с указанным ID не найдена.
+     */
     @Override
     public void deleteTask(Long taskId) {
         Task task = taskRepository.findById(taskId).orElseThrow(() ->
@@ -56,6 +85,14 @@ public class TaskServiceImpl implements TaskService {
         taskRepository.delete(task);
     }
 
+    /**
+     * Обновление информации о задаче.
+     *
+     * @param taskId       ID задачи.
+     * @param updatedTaskInfoDTO DTO для обновления информации о задаче.
+     * @return Информация об обновленной задаче.
+     * @throws TaskNotFoundException Если задача с указанным ID не найдена.
+     */
     @Override
     public TaskInfoDTO updateTaskInfo(Long taskId, TaskInfoDTO updatedTaskInfoDTO) {
         Task task = taskRepository.findById(taskId)
@@ -69,3 +106,4 @@ public class TaskServiceImpl implements TaskService {
         return taskMapper.toTaskInfoDTO(taskRepository.save(task));
     }
 }
+
