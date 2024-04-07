@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskInfoDTO {
+    private Long taskId;
     @NotBlank(message = "Title cannot be blank")
     @NotNull(message = "Title cannot be null")
     private String title;
