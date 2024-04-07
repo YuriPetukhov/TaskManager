@@ -7,5 +7,5 @@ CREATE TABLE tasks (
     title VARCHAR(20) NOT NULL,
     description VARCHAR(255),
     due_date TIMESTAMP NOT NULL,
-    completed BOOLEAN NOT NULL
+    completed BOOLEAN DEFAULT false
 );
